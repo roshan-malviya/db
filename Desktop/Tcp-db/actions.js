@@ -10,7 +10,7 @@ const SET = (data) => {
             return ("OK\n".green)
 
         default:
-            return (`set takes two inputs as arguments but get ${data.length - 1}\n`)
+            return (`set takes two inputs as arguments but get ${data.length - 1}\n`.yellow)
     }
 }
 
@@ -20,6 +20,10 @@ const GET = (data) => {
 
     switch (data.length) {
         case 2:
+            if(Array.isArray(store[data[1]])){
+                return('Wrong type opration\n'.yellow)
+            }
+
             if (store[data[1]] == undefined) {
                 return ("key dosen't exist\n".yellow)
             } else {
@@ -96,13 +100,6 @@ const RPUSH =(data)=>{
     }
    return("OK\n".green)
 }
-
-
-
-
-
-
-
 
 
 

@@ -10,6 +10,8 @@ const EXPIRES= require('./actions').EXPIRES
 const SAVE= require('./actions').SAVE
 const LPUSH= require('./actions').LPUSH
 const RPUSH= require('./actions').RPUSH
+const LPOP= require('./actions').LPUSH
+const RPOP= require('./actions').RPUSH
 
 
 
@@ -30,11 +32,9 @@ const server = net.createServer((Sock)=>{
         console.log(`data ${Sock.remoteAddress} ${data}`)        
         let  data_ = data.trim().split(' ')
         data_=data_.map((d)=>d.trim())
-        console.log(store)
         if(data_[0].toLowerCase()=='set'){
             let aaa =SET(data_)
-            console.log(store)
-            Sock.write(aaa)
+            Sock.write(`${aaa}`.green)
         }
         else if (data_[0].toLowerCase()=='get'){
             let aaa1 = GET(data_)
@@ -51,6 +51,12 @@ const server = net.createServer((Sock)=>{
             Sock.write(res2)
         }else if(data_[0].toLowerCase()=='rpush'){
             const res2 = RPUSH(data_)
+            Sock.write(res2)
+        }else if(data_[0].toLowerCase()=='lpop'){
+            const res2 = LPOP(data_)
+            Sock.write(res2)
+        }else if(data_[0].toLowerCase()=='rpop'){
+            const res2 = RPOP(data_)
             Sock.write(res2)
         }else{
             if (data_[0]==''){
