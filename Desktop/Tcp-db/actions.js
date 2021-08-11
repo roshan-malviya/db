@@ -20,8 +20,8 @@ const GET = (data) => {
 
     switch (data.length) {
         case 2:
-            if(Array.isArray(store[data[1]])){
-                return('Wrong type opration\n'.yellow)
+            if (Array.isArray(store[data[1]])) {
+                return ('Wrong type opration\n'.yellow)
             }
 
             if (store[data[1]] == undefined) {
@@ -74,41 +74,52 @@ const SAVE = (data) => {
 }
 
 
-const LPUSH =(data)=>{
+const LPUSH = (data) => {
 
-    if ((store[data[1]]==undefined || store[data[1]]) &&  ! Array.isArray(store[data[1]])){
+    if ((store[data[1]] == undefined || store[data[1]]) && !Array.isArray(store[data[1]])) {
         let arr = [data[2]]
-       store[data[1]]=arr;
-       
-    }else if (Array.isArray(store[data[1]])){
+        store[data[1]] = arr;
+
+    } else if (Array.isArray(store[data[1]])) {
         let arr1 = store[data[1]]
         arr1.push(data[2])
     }
-   return("OK\n".green)
+    return ("OK\n".green)
 }
 
 
-const RPUSH =(data)=>{
+const RPUSH = (data) => {
 
-    if ((store[data[1]]==undefined || store[data[1]]) &&  ! Array.isArray(store[data[1]])){
+    if ((store[data[1]] == undefined || store[data[1]]) && !Array.isArray(store[data[1]])) {
         let arr = [data[2]]
-       store[data[1]]=arr;
-       
-    }else if (Array.isArray(store[data[1]])){
+        store[data[1]] = arr;
+
+    } else if (Array.isArray(store[data[1]])) {
         let arr1 = store[data[1]]
         arr1.unshift(data[2])
     }
-   return("OK\n".green)
+    return ("OK\n".green)
 }
 
+const LRANGE = (data)=>{
+    let init = Number(data[2])
+    let last = Number(data[3])
+    const arr = store[data[1]]
+    console.log(isNaN(init));
+    if(Array.isArray(arr) && !isNaN(init) && ! isNaN(last) ){
+        const a = arr.slice(data[2],data[3])
+        console.log(a);
+        let final ='';
+        for (i of a){
+            final=`${final+i}\n`
+        }
+        return(final.white);
+    }else{
+        return('WRONG TYPE OPRATION\n'.yellow)
+    }
+}
 
-
-
-
-
-
-
-module.exports = { SET, GET, EXPIRES, SAVE, LPUSH, RPUSH };
+module.exports = { SET, GET, EXPIRES, SAVE, LPUSH, RPUSH, LRANGE };
 
 
 
