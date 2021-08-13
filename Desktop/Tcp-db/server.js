@@ -33,46 +33,38 @@ const server = net.createServer((Sock)=>{
         console.log(`data ${Sock.remoteAddress} ${data}`)        
         let  data_ = data.trim().split(' ')
         data_=data_.map((d)=>d.trim())
-        if(data_[0].toLowerCase()=='set'){
-            let aaa =SET(data_)
-            Sock.write(`${aaa}`.green)
-        }
-        else if (data_[0].toLowerCase()=='get'){
-            let aaa1 = GET(data_)
-            console.log(store)
-            Sock.write(aaa1)
-        }        else if (data_[0].toLowerCase()=='expires'){
-            let aaa1 = EXPIRES(data_)
-            Sock.write(aaa1)
-        }        else if (data_[0].toLowerCase()=='save'){
-            let aaa1 = SAVE(data_)
-            Sock.write(aaa1)
-        }else if(data_[0].toLowerCase()=='lpush'){
-            const res2 = LPUSH(data_)
-            Sock.write(res2)
-        }else if(data_[0].toLowerCase()=='rpush'){
-            const res2 = RPUSH(data_)
-            Sock.write(res2)
-        }else if(data_[0].toLowerCase()=='lpop'){
-            const res2 = LPOP(data_)
-            Sock.write(res2)
-        }else if(data_[0].toLowerCase()=='rpop'){
-            const res2 = RPOP(data_)
-            Sock.write(res2)
-        }else if (data_[0].toLowerCase()=='lrange'){
-            if(data_.length==4)
-            {let res2 = LRANGE(data_)
-            Sock.write(res2)}else{
-                Sock.write(`lrange takes 3 inputs but give is ${data_.length-1}`)
-            }
+        let command = data_[0]
 
-        }
-        else{
-            if (data_[0]==''){
-                Sock.write('\n')
-            }else(
-                Sock.write('wrong input\n'.red)
-            )
+        try {
+
+            switch (command.toLowerCase()){
+                case ('set'):
+                    let res =  SET(data_)
+                    Sock.write(res)
+                case ('get'):
+                     res =  GET(data_)
+                    Sock.write(res)
+                case ('expires'):
+                     res =  EXPIRES(data_)
+                    Sock.write(res)
+                case('save'):
+                 res =  SAVE(data_)
+                Sock.write(res)
+                case ('lpush'):
+                     res =  LPUSH(data_)
+                    Sock.write(res)
+                case ('rpush'):
+                     res =  RPUSH(data_)
+                    Sock.write(res)
+                case ('lrange'):
+                     res =  SET(data_)
+                    Sock.write(res)
+                default :
+                    throw("NOT A COMMAND \n".red)
+            }
+            
+        } catch (err) {
+            Sock.write(err)
         }
     })
 

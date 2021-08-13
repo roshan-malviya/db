@@ -10,7 +10,7 @@ const SET = (data) => {
             return ("OK\n".green)
 
         default:
-            return (`set takes two inputs as arguments but get ${data.length - 1}\n`.yellow)
+            throw (`set takes two inputs as arguments but get ${data.length - 1}\n`.yellow)
     }
 }
 
@@ -21,17 +21,17 @@ const GET = (data) => {
     switch (data.length) {
         case 2:
             if (Array.isArray(store[data[1]])) {
-                return ('Wrong type opration\n'.yellow)
+                throw ('Wrong type opration\n'.yellow)
             }
 
             if (store[data[1]] == undefined) {
-                return ("key dosen't exist\n".yellow)
+                throw ("key dosen't exist\n".yellow)
             } else {
                 return (`${store[data[1]]}\n`.green)
             }
 
         default:
-            return (`get takes one inputs as arguments but get ${data.length - 1}\n`.green)
+            throw (`get takes one inputs as arguments but get ${data.length - 1}\n`.green)
 
     }
 
@@ -51,20 +51,20 @@ const EXPIRES = (data) => {
                 }, 1000 * data[2])
                 return ("OK\n".green)
             } else {
-                return (`Key dosen't exist\n`.red)
+                throw (`Key dosen't exist\n`.red)
             }
         } else {
-            return ('second argument should be a number\n'.green)
+            throw ('second argument should be a number\n'.green)
         }
     } else {
-        return (`expire takes 2 inputs given ${data.length - 1}\n`.red)
+        throw (`expire takes 2 inputs given ${data.length - 1}\n`.red)
     }
 }
 
 const SAVE = (data) => {
 
     if (Object.keys(store).length === 0) {
-        return ('DB is empty'.blue)
+        throw ('DB is empty'.blue)
     } else {
         const jsonData = JSON.stringify(store)
         fs.writeFileSync('/tmp/data.json', jsonData)
@@ -102,10 +102,10 @@ const RPUSH = (data) => {
 }
 
 const LRANGE = (data)=>{
+    if(data.length==4){
     let init = Number(data[2])
     let last = Number(data[3])
     const arr = store[data[1]]
-    console.log(isNaN(init));
     if(Array.isArray(arr) && !isNaN(init) && ! isNaN(last) ){
         const a = arr.slice(data[2],data[3])
         console.log(a);
@@ -115,7 +115,9 @@ const LRANGE = (data)=>{
         }
         return(final.white);
     }else{
-        return('WRONG TYPE OPRATION\n'.yellow)
+        throw('WRONG TYPE OPRATION\n'.yellow)
+    }}else{
+        throw(`TAKES INPUTS AND GIVEN ${data.length}\n`.red)
     }
 }
 
