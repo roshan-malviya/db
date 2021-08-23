@@ -10,8 +10,9 @@ const EXPIRES= require('./actions').EXPIRES
 const SAVE= require('./actions').SAVE
 const LPUSH= require('./actions').LPUSH
 const RPUSH= require('./actions').RPUSH
-const LPOP= require('./actions').LPUSH
-const RPOP= require('./actions').RPUSH
+
+const LRANGE= require('./actions').LRANGE
+
 
 
 
@@ -32,38 +33,38 @@ const server = net.createServer((Sock)=>{
         console.log(`data ${Sock.remoteAddress} ${data}`)        
         let  data_ = data.trim().split(' ')
         data_=data_.map((d)=>d.trim())
-        if(data_[0].toLowerCase()=='set'){
-            let aaa =SET(data_)
-            Sock.write(`${aaa}`.green)
-        }
-        else if (data_[0].toLowerCase()=='get'){
-            let aaa1 = GET(data_)
-            console.log(typeof(aaa1))
-            Sock.write(aaa1)
-        }        else if (data_[0].toLowerCase()=='expires'){
-            let aaa1 = EXPIRES(data_)
-            Sock.write(aaa1)
-        }        else if (data_[0].toLowerCase()=='save'){
-            let aaa1 = SAVE(data_)
-            Sock.write(aaa1)
-        }else if(data_[0].toLowerCase()=='lpush'){
-            const res2 = LPUSH(data_)
-            Sock.write(res2)
-        }else if(data_[0].toLowerCase()=='rpush'){
-            const res2 = RPUSH(data_)
-            Sock.write(res2)
-        }else if(data_[0].toLowerCase()=='lpop'){
-            const res2 = LPOP(data_)
-            Sock.write(res2)
-        }else if(data_[0].toLowerCase()=='rpop'){
-            const res2 = RPOP(data_)
-            Sock.write(res2)
-        }else{
-            if (data_[0]==''){
-                Sock.write('\n')
-            }else(
-                Sock.write('wrong input\n'.red)
-            )
+        let command = data_[0]
+
+        try {
+
+            switch (command.toLowerCase()){
+                case ('set'):
+                    let res =  SET(data_)
+                    Sock.write(res)
+                case ('get'):
+                     res =  GET(data_)
+                    Sock.write(res)
+                case ('expires'):
+                     res =  EXPIRES(data_)
+                    Sock.write(res)
+                case('save'):
+                 res =  SAVE(data_)
+                Sock.write(res)
+                case ('lpush'):
+                     res =  LPUSH(data_)
+                    Sock.write(res)
+                case ('rpush'):
+                     res =  RPUSH(data_)
+                    Sock.write(res)
+                case ('lrange'):
+                     res =  LRANGE(data_)
+                    Sock.write(res)
+                default :
+                    throw("NOT A COMMAND \n".red)
+            }
+            
+        } catch (err) {
+            Sock.write(err)
         }
     })
 
