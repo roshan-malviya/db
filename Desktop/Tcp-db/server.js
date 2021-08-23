@@ -57,7 +57,7 @@ const server = net.createServer((Sock)=>{
                      res =  RPUSH(data_)
                     Sock.write(res)
                 case ('lrange'):
-                     res =  SET(data_)
+                     res =  LRANGE(data_)
                     Sock.write(res)
                 default :
                     throw("NOT A COMMAND \n".red)
